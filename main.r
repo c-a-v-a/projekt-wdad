@@ -33,3 +33,16 @@ earnings.ci2.margin = qt(p = (1 - earnings.interval2 / 2),
 earnings.ci2 = earnings.mean + c(-1,1) * earnings.ci2.margin;
 
 # C
+my_bootstrap = function(data) {
+    n = length(xs);
+    means = c();
+
+    for (i in 1:10000) {
+        rands = sample(1:length(data), length(data), replace = T);
+        xs = data[rands];
+
+        append(means, mean(xs));
+    }
+
+    return(means);
+}
