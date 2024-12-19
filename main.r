@@ -34,15 +34,24 @@ earnings.ci2 = earnings.mean + c(-1,1) * earnings.ci2.margin;
 
 # C
 my_bootstrap = function(data) {
-    n = length(xs);
+    n = length(data);
     means = c();
 
     for (i in 1:10000) {
-        rands = sample(1:length(data), length(data), replace = T);
+        rands = sample(1:n, n, replace = T);
         xs = data[rands];
 
-        append(means, mean(xs));
+        means = append(means, mean(xs));
     }
 
     return(means);
 }
+
+# hist
+# qqplot
+
+earnings.bootstrap = my_bootstrap(earnings);
+earnings.bootstrap.mean = mean(earnings.bootstrap);
+
+quantile(earnings.bootstrap, probs = c(0.05, 0.95));
+quantile(earnings.bootstrap, probs = c(0.025, 0.975));
