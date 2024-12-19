@@ -1,0 +1,57 @@
+Earnings mean:  13311.7 
+Earnings standard derivation:  15000 
+Earnings standard error:  4743.416 
+
+[1] "Confidence interval for 0.9 assuming normal distribution:"
+[1]  5509.474 21113.926
+[1] "Confidence interval for 0.95 assuming normal distribution:"
+[1]  4014.775 22608.625
+
+Earnings standard derivation:  14662.04 
+Earnings standard error:  4636.545 
+
+[1] "Confidence interval for 0.9 assuming Student's t-distribution:"
+[1]  4812.39 21811.01
+[1] "Confidence interval for 0.95 assuming Student's t-distribution:"
+[1]  2823.107 23800.293
+
+Earnings mean (bootstrap):  13297.86 
+[1] "Confidence interval for 0.9:"
+       5%       95% 
+ 6637.675 20979.020 
+[1] "Confidence interval for 0.95:"
+    2.5%    97.5% 
+ 5593.13 22588.12 
+
+[1] "Confidence intervals for 0.95 for shrimps:"
+[1] "Mean:"
+    2.5%    97.5% 
+30.94444 32.59444 
+[1] "Standard deviation:"
+    2.5%    97.5% 
+0.864868 2.592362 
+[1] "Standard error:"
+     2.5%     97.5% 
+0.7479967 6.7203399 
+
+[1] "Confidence intervals for 0.95 for sitka size:"
+[1] "Mean:"
+    2.5%    97.5% 
+5.936503 6.045206 
+[1] "Standard deviation:"
+     2.5%     97.5% 
+0.6638694 0.7440250 
+[1] "Standard error:"
+     2.5%     97.5% 
+0.4407225 0.5535731 
+
+[1] "Confidence intervals for 0.95 for absent days:"
+[1] "Mean:"
+    2.5%    97.5% 
+13.93818 19.16455 
+[1] "Standard deviation:"
+    2.5%    97.5% 
+13.48162 18.77490 
+[1] "Standard error:"
+    2.5%    97.5% 
+181.7541 352.4969 
