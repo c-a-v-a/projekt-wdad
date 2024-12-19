@@ -107,7 +107,7 @@ dev.off();
 
 shrimps.bootstrap.mean = adv_bootstrap(shrimp, mean);
 shrimps.bootstrap.sd = adv_bootstrap(shrimp, sd);
-shrimps.bootstrap.var = shrimps.bootstrap.sd ^ 2;
+shrimps.bootstrap.var = adv_bootstrap(shrimp, var);
 
 print("Confidence intervals for 0.95 for shrimps:");
 print("Mean:");
@@ -118,22 +118,22 @@ print("Standard error:");
 quantile(shrimps.bootstrap.var, probs = c(0.025, 0.975));
 
 # CASE 2
-png(file = "plots/sitkasize_qq.png");
-qqnorm(Sitka89$size, main = "Q-Q Plot of sitka trees size");
-qqline(Sitka89$size);
+png(file = "plots/npkyield_qq.png");
+qqnorm(npk$yield, main = "Q-Q Plot of yield of peas");
+qqline(npk$yield);
 dev.off();
 
-sitkasize.bootstrap.mean = adv_bootstrap(Sitka89$size, mean);
-sitkasize.bootstrap.sd = adv_bootstrap(Sitka89$size, sd);
-sitkasize.bootstrap.var = sitkasize.bootstrap.sd ^ 2;
+npkyield.bootstrap.mean = adv_bootstrap(npk$yield, mean);
+npkyield.bootstrap.sd = adv_bootstrap(npk$yield, sd);
+npkyield.bootstrap.var = adv_bootstrap(npk$yield, var);
 
-print("Confidence intervals for 0.95 for sitka size:");
+print("Confidence intervals for 0.95 for npk yield:");
 print("Mean:");
-quantile(sitkasize.bootstrap.mean, probs = c(0.025, 0.975));
+quantile(npkyield.bootstrap.mean, probs = c(0.025, 0.975));
 print("Standard deviation:");
-quantile(sitkasize.bootstrap.sd, probs = c(0.025, 0.975));
+quantile(npkyield.bootstrap.sd, probs = c(0.025, 0.975));
 print("Standard error:");
-quantile(sitkasize.bootstrap.var, probs = c(0.025, 0.975));
+quantile(npkyield.bootstrap.var, probs = c(0.025, 0.975));
 
 # CASE 3
 png(file = "plots/quineabsent_qq.png");
@@ -143,7 +143,7 @@ dev.off();
 
 quineabsent.bootstrap.mean = adv_bootstrap(quine$Days, mean);
 quineabsent.bootstrap.sd = adv_bootstrap(quine$Days, sd);
-quineabsent.bootstrap.var = quineabsent.bootstrap.sd ^ 2;
+quineabsent.bootstrap.var = adv_bootstrap(quine$Days, var);
 
 print("Confidence intervals for 0.95 for absent days:");
 print("Mean:");

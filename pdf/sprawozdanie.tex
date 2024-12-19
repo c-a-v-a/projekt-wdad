@@ -57,37 +57,43 @@
 Zapisujemy dane do naszego zadania.
 
 \begin{lstlisting}[language=R]
-    earnings = c(45617,7166,18594,2236,1278,19828,4033,28151,2414,3800);
-    earnings.sd = 15000;
+earnings = c(45617,7166,18594,2236,1278,19828,4033,28151,2414,3800);
+earnings.sd = 15000;
 \end{lstlisting}
 
 Estymujemy średnią z próbki, oraz błąd standardowy (korzystając z danego odchylenia standardowego).
 
 \begin{lstlisting}[language=R]
-    earnings.mean = mean(earnings);
-    earnings.se = earnings.sd / sqrt(length(earnings));
+earnings.mean = mean(earnings);
+earnings.se = earnings.sd / sqrt(length(earnings));
 
-    # Output
+# Output
+# Earnings mean:  13311.7 
+# Earnings standard error:  4743.416 
 \end{lstlisting}
 
 Obliczamy przedziały ufności 90\%, przy założeniu rozkładu normalnego próbki.
 
 \begin{lstlisting}[language=R]
-    earnings.interval1 = 0.1;
-    earnings.ci1.margin = qnorm(p = (1 - earnings.interval1 / 2)) * earnings.se;
-    earnings.ci1 = earnings.mean + c(-1,1) * earnings.ci1.margin;
+earnings.interval1 = 0.1;
+earnings.ci1.margin = qnorm(p = (1 - earnings.interval1 / 2)) * earnings.se;
+earnings.ci1 = earnings.mean + c(-1,1) * earnings.ci1.margin;
 
-    # Output
+# Output
+# "Confidence interval for 0.9 assuming normal distribution:"
+# 5509.474 21113.926
 \end{lstlisting}
 
 Obliczamy przedziały ufności 95\%, przy założeniu rozkładu normalnego próbki.
 
 \begin{lstlisting}[language=R]
-    earnings.interval2 = 0.05;
-    earnings.ci2.margin = qnorm(p = (1 - earnings.interval2 / 2)) * earnings.se;
-    earnings.ci2 = earnings.mean + c(-1,1) * earnings.ci2.margin;
+earnings.interval2 = 0.05;
+earnings.ci2.margin = qnorm(p = (1 - earnings.interval2 / 2)) * earnings.se;
+earnings.ci2 = earnings.mean + c(-1,1) * earnings.ci2.margin;
 
-    # Output
+# Output
+# "Confidence interval for 0.95 assuming normal distribution:"
+# 4014.775 22608.625
 \end{lstlisting}
 
 \pagebreak
@@ -97,10 +103,12 @@ Odrzucamy dane nam wcześniej odchylenie standardowe i estymujemy nowe odchyleni
 oraz błąd standardowy na podstawie danej próbki.
 
 \begin{lstlisting}[language=R]
-    earnings.sd = sd(earnings);
-    earnings.se = earnings.sd / sqrt(length(earnings));
+earnings.sd = sd(earnings);
+earnings.se = earnings.sd / sqrt(length(earnings));
 
-    # Output
+# Output
+# Earnings standard derivation:  14662.04 
+# Earnings standard error:  4636.545 
 \end{lstlisting}
 
 Używamy rozkładu t Studenta, żeby obliczyć przedziały ufności dla naszej próbki.
@@ -108,23 +116,27 @@ Używamy rozkładu t Studenta, żeby obliczyć przedziały ufności dla naszej p
 Przedział ufności 90\%.
 
 \begin{lstlisting}[language=R]
-    earnings.interval1 = 0.1;
-    earnings.ci1.margin = qt(p = (1 - earnings.interval1 / 2),
-                             df = length(earnings) - 1) * earnings.se;
-    earnings.ci1 = earnings.mean + c(-1,1) * earnings.ci1.margin;
+earnings.interval1 = 0.1;
+earnings.ci1.margin = qt(p = (1 - earnings.interval1 / 2),
+                         df = length(earnings) - 1) * earnings.se;
+earnings.ci1 = earnings.mean + c(-1,1) * earnings.ci1.margin;
 
-    # Output
+# Output
+# "Confidence interval for 0.9 assuming Student's t-distribution:"
+# 4812.39 21811.01
 \end{lstlisting}
 
 Przedział ufności 95\%.
 
 \begin{lstlisting}[language=R]
-    earnings.interval2 = 0.05;
-    earnings.ci2.margin = qt(p = (1 - earnings.interval2 / 2),
-                             df = length(earnings) - 1) * earnings.se;
-    earnings.ci2 = earnings.mean + c(-1,1) * earnings.ci2.margin;
+earnings.interval2 = 0.05;
+earnings.ci2.margin = qt(p = (1 - earnings.interval2 / 2),
+                         df = length(earnings) - 1) * earnings.se;
+earnings.ci2 = earnings.mean + c(-1,1) * earnings.ci2.margin;
 
-    # Output
+# Output
+# "Confidence interval for 0.95 assuming Student's t-distribution:"
+# 2823.107 23800.293
 \end{lstlisting}
 
 \pagebreak
@@ -150,45 +162,175 @@ metody bootstrap do obliczenia przedziałów ufności.
 Tworzymy funkcje bootstrap i używamy jej na naszej próbce.
 
 \begin{lstlisting}[language=R]
-    my_bootstrap = function(data) {
-        n = length(data);
-        means = c();
+my_bootstrap = function(data) {
+    n = length(data);
+    means = c();
 
-        for (i in 1:10000) {
-            rands = sample(1:n, n, replace = T);
-            xs = data[rands];
+    for (i in 1:10000) {
+        rands = sample(1:n, n, replace = T);
+        xs = data[rands];
 
-            means = append(means, mean(xs));
-        }
-
-        return(means);
+        means = append(means, mean(xs));
     }
 
-    earnings.bootstrap = my_bootstrap(earnings);
+    return(means);
+}
+
+earnings.bootstrap = my_bootstrap(earnings);
 \end{lstlisting}
 
 Wyliczamy przedział ufności 90\%.
 
 \begin{lstlisting}[language=R]
-    quantile(earnings.bootstrap, probs = c(0.05, 0.95));
-    # Output
+quantile(earnings.bootstrap, probs = c(0.05, 0.95));
+
+# Output
+# "Confidence interval for 0.9:"
+#      5%      95% 
+# 6641.84 20903.85 
 \end{lstlisting}
 
 Wyliczamy przedział ufności 95\%.
 
 \begin{lstlisting}[language=R]
-    quantile(earnings.bootstrap, probs = c(0.025, 0.975));
-    # Output
+quantile(earnings.bootstrap, probs = c(0.025, 0.975));
+
+# Output
+# "Confidence interval for 0.95:"
+#     2.5%     97.5% 
+# 5638.485 22847.100 
 \end{lstlisting}
 
 \pagebreak
 
 \section{Zadanie 2}
+W tym zadaniu do zbadania wybrałem zestawy danych: shrimp, Sitka89 i quine.
+
+Najpierw dodałem bibliotekę MASS, a następnie napisałem drugą metodę bootstrap,
+która ułatwi mi liczenie przedziałów ufności dla odchylenia standardowego i wariancji.
+
+\begin{lstlisting}[language=R]
+library(MASS);
+
+adv_bootstrap = function(data, f) {
+    n = length(data);
+    result = c();
+
+    for (i in 1:10000) {
+        rands = sample(1:n, n, replace = T);
+        xs = data[rands];
+
+        result = append(result, f(xs));
+    }
+
+    return(result);
+}
+\end{lstlisting}
+
+\pagebreak
 
 \subsection{Shrimp}
+Shrimp to zestaw danych, który opisuje ilość krewetek (procent całkowitej masy)
+w koktajlu krewetkowym.
 
-\subsection{Sitka89}
+\begin{figure}[h]
+\includegraphics[scale=0.5]{shrimps_qq.png}
+\centering
+\end{figure}
+
+Na powyższym wykresie możemy zauważyć, że poza dwoma wartościami skrajnymi,
+rozkład naszych danych jest bardzo zbliżony do rozkładu normalnego, jednak
+o ciężkich ogonach (fat tails), co oznacza zbyt dużą kurtozę.
+
+Obliczmy zatem przedziały ufności 95\%, dla średniej, odchylenia standardowego i wariancji.
+
+\begin{lstlisting}[language=R]
+shrimps.bootstrap.mean = adv_bootstrap(shrimp, mean);
+shrimps.bootstrap.sd = adv_bootstrap(shrimp, sd);
+shrimps.bootstrap.var = adv_bootstrap(shrimp, var);
+
+# Output
+# "Confidence intervals for 0.95 for shrimps:"
+# "Mean:"
+#    2.5%    97.5% 
+# 30.92222 32.57222 
+# "Standard deviation:"
+#     2.5%     97.5% 
+# 0.8732765 2.5980592 
+# "Standard error:"
+#     2.5%     97.5% 
+# 0.7527917 6.7226168 
+\end{lstlisting}
+
+\pagebreak
+
+\subsection{Npk}
+Npk to zestaw danych z eksperymentu, który testował wpływ azotu, fosforu i potasu
+na wzrost groszku. Ja skupiłem się na statystyce yield, która zawiera infromacje
+o tym, ile grochu zebrano na jednej działce.
+
+\begin{figure}[h]
+\includegraphics[scale=0.5]{npkyield_qq.png}
+\centering
+\end{figure}
+
+Na powyższym wykresie widzimy, że rozkład naszych danych, jest bardzo podobny do
+rozkładu normalnego. Jednak nasz rozkład ba bardzo lekkie ogony, co oznacza ujemną
+kurtozę.
+
+Obliczmy zatem przedziały ufności 95\%, dla średniej, odchylenia standardowego i wariancji.
+
+\begin{lstlisting}[language=R]
+npkyield.bootstrap.mean = adv_bootstrap(npk$yield, mean);
+npkyield.bootstrap.sd = adv_bootstrap(npk$yield, sd);
+npkyield.bootstrap.var = adv_bootstrap(npk$yield, var);
+
+# Output
+# "Confidence intervals for 0.95 for npk yield:"
+# "Mean:"
+#   2.5%   97.5% 
+# 52.4625 57.3500 
+# "Standard deviation:"
+#    2.5%    97.5% 
+# 4.422683 7.627811 
+# "Standard error:"
+#    2.5%    97.5% 
+# 19.73285 57.91169 
+\end{lstlisting}
+
+\pagebreak
 
 \subsection{Quine}
+Quine to zestaw danych, który zawiera informacje o uczniach z Austalii. Ja skupiłem
+się na statystyce, która przedstawi ile dni dane dziecko opuściło w trakcie roku szkolnego.
+
+\begin{figure}[h]
+\includegraphics[scale=0.5]{quineabsent_qq.png}
+\centering
+\end{figure}
+
+Na powyższym wykresie możemy zauważyć, że nasz rozkład znacząco odbiega od
+rozkładu normalnego, ponieważ nasz rozkład jest zbyt pozytywnie skośny (tj. 
+pochyla się na lewą stonę).
+
+Obliczmy zatem przedziały ufności 95\%, dla średniej, odchylenia standardowego i wariancji.
+
+\begin{lstlisting}[language=R]
+quineabsent.bootstrap.mean = adv_bootstrap(quine$Days, mean);
+quineabsent.bootstrap.sd = adv_bootstrap(quine$Days, sd);
+quineabsent.bootstrap.var = adv_bootstrap(quine$Days, var);
+
+# Output
+# "Confidence intervals for 0.95 for absent days:"
+# "Mean:"
+#    2.5%    97.5% 
+# 13.96575 19.13031 
+# "Standard deviation:"
+#    2.5%    97.5% 
+# 13.43493 18.74195 
+# "Standard error:"
+#    2.5%    97.5% 
+# 181.1858 353.6281 
+\end{lstlisting}
 
 \end{document}

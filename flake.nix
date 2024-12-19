@@ -11,14 +11,10 @@
       (system:
         let 
 	      pkgs = nixpkgs.legacyPackages.${system};
-	      tex = (pkgs.texlive.combine {
-	        inherit (nixpkgs.texlive) scheme-minimal
-	        babel fontenc inputenc;
-	      });
 	    in
 	    {
 	      devShells.default = pkgs.mkShell {
-	        buildInputs = [ pkgs.R pkgs.rPackages.MASS ];
+	        buildInputs = [ pkgs.R pkgs.rPackages.MASS pkgs.texlive.combined.scheme-small ];
 	      };
 	    }
       );
