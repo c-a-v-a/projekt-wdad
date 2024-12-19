@@ -55,3 +55,28 @@ earnings.bootstrap.mean = mean(earnings.bootstrap);
 
 quantile(earnings.bootstrap, probs = c(0.05, 0.95));
 quantile(earnings.bootstrap, probs = c(0.025, 0.975));
+
+# 2
+library(MASS);
+
+adv_bootstrap = function(data, f) {
+    n = length(data);
+    result = c();
+
+    for (i in 1:10000) {
+        rands = sample(1:n, n, replace = T);
+        xs = data[rands];
+
+        result = append(result, f(xs));
+    }
+
+    return(result);
+}
+
+# CASE 1
+shrimps.bootstrap.mean = adv_bootstrap(shrimp, mean);
+shrimps.bootstrap.sd = adv_bootstrap(shrimp, sd);
+shrimps.bootstrap.var = shrimps.bootstrap.sd ^ 2;
+quantile(shrimps.bootstrap.mean, probs = c(0.025, 0.975));
+quantile(shrimps.bootstrap.sd, probs = c(0.025, 0.975));
+quantile(shrimps.bootstrap.var, probs = c(0.025, 0.975));
