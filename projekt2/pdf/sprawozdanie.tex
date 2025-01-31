@@ -193,7 +193,7 @@ Co po uproszczeniu da nam:
   \sum_{i=1}^{n} x_i y_i = b_0 \sum_{i=1}^{n} x_i + b_1 \sum_{i=1}^{n} x_i^2
 \end{equation}
 
-Wyliczamy $b_0$ korzystając ze wzoru na średnią ($\overline{x} = \frac{1}{n} \sum_{i=0}^{n}$):
+Wyliczamy $b_0$ korzystając ze wzoru na średnią ($\overline{x} = \frac{1}{n} \sum_{i=0}^{n}x_i$):
 \begin{equation}
   n \overline{y} = n b_0 + n \overline{x} b_1 \Rightarrow b_0 = \overline{y} - \overline{x} b_1
 \end{equation}
@@ -229,7 +229,38 @@ Ze wzoru na średnią:
 Co kończy dowód.
 
 \subsection{Dowód 2}
+Rozwijamy lewą stronę:
+\begin{equation}
+  \sum_{i=1}^{n}(x_i y_i - x_i \overline{y} - y_i \overline{x} + \overline{x}\overline{y}
+  = \sum_{i=1}^{n}x_iy_i - \overline{y}\sum_{i=1}^{n}x_i - \overline{x}\sum_{i=1}^{n}y_i + \sum_{i=1}^{n}\overline{x}\overline{y}
+\end{equation}
+
+Ze wzoru na średnią:
+\begin{equation}
+  \sum_{i=1}^{n}x_i y_i - n\overline{x}\overline{y} - n\overline{x}\overline{y} + n\overline{x}\overline{y} = \sum_{i=1}^{n}x_i y_i - n\overline{x}\overline{y}
+\end{equation}
+
+Zamieńmy średnie na sumy:
+\begin{equation}
+  \sum_{i=1}^{n}x_i y_i - n\overline{x}\overline{y} =\sum_{i=1}^{n}x_i y_i - \frac{1}{n}\sum_{i=1}^{n} x_i \sum_{i=1}^{n}y_i
+\end{equation}
+
+Co kończy dowód
 
 \subsection{Wzór na współczynnik $b_1$}
+Weźmy wyliczony przez nas w zadaniu 2.1 wzór na współczynnik $b_1$
+\begin{equation}
+  b_1 = \frac{\sum_{i=1}^{n} x_i y_i - n\overline{x}\overline{y}}{\sum_{i=1}^{n} x_i^2 - n \overline{x}^2}
+\end{equation}
+
+Zamieńmy średnie na sumy
+\begin{equation}
+  b_1 = \frac{\sum_{i=1}^{n} x_i y_i - \frac{1}{n}\sum_{i=1}^{n}x_i\sum_{i=1}^{n}y_i}{\sum_{i=1}^{n} x_i^2 - \frac{1}{n}(\sum_{i=1}^{n}x_i)^2}
+\end{equation}
+
+Podstawiamy udowodnione przez nas wzory z Dowodu 1 i Dowodu 2
+\begin{equation}
+  b_1 = \frac{\sum_{i=1}^{n}(x_i-\overline{x})(y_i-\overline{y})}{\sum_{i=1}^{n}(x_i-\overline{x})^2} \Rightarrow b_1=\frac{cov(x,y)}{var(x,y)}
+\end{equation}
 
 \end{document}
