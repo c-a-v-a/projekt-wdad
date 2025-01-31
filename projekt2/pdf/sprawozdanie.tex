@@ -159,7 +159,77 @@ liniowej jest dobrze dopasowany do danych.
 
 \section{Zadanie 2}
 \subsection{Współczynniki regresji}
-\subsection{Dowód}
+Zakładamy, że mamy n obserwacji $(x_i,y_i)$, gdzie $i=1,2,\ldots,n$. Wiemy
+także, że model regresji liniowej ma postać $y_i=b_0 + b_1 x_i$
+
+Chcemy wyznaczyć $b_0$ i $b_1$, które minimalizują sumę kwadratów reszt. W tym
+celu zapiszmy sumę kwadratów reszt jako funkcje dwóch zmiennych $b_0$ i $b_1$.
+
+\begin{equation}
+  X(b_0,b_1) = \sum_{i=1}^{n} (y_i - (b_0 + b_1 x_i))^2
+\end{equation}
+
+Aby znaleźć minima naszej funkcji za względu na parametry $b_0$ i $b_1$,
+różniczkujemy ją po $b_0$ i $b_1$ i przyrównujemy do 0.
+
+Dla $b_0$:
+
+\begin{equation}
+  \frac{\partial X}{\partial b_0} = \sum_{i=1}^{n} -2(y_i - (b_0 + b_i x_i)) = 0
+\end{equation}
+
+Co po uproszczeniu da nam:
+\begin{equation}
+  \sum_{i=1}^{n} y_i = nb_0 + b_1 \sum_{i=1}^{n} x_i
+\end{equation}
+
+Dla $b_1$:
+\begin{equation}
+  \frac{\partial X}{\partial b_1} = \sum_{i=1}^{n} -2x_i(y_i - (b_0 + b_i x_i)) = 0
+\end{equation}
+
+Co po uproszczeniu da nam:
+\begin{equation}
+  \sum_{i=1}^{n} x_i y_i = b_0 \sum_{i=1}^{n} x_i + b_1 \sum_{i=1}^{n} x_i^2
+\end{equation}
+
+Wyliczamy $b_0$ korzystając ze wzoru na średnią ($\overline{x} = \frac{1}{n} \sum_{i=0}^{n}$):
+\begin{equation}
+  n \overline{y} = n b_0 + n \overline{x} b_1 \Rightarrow b_0 = \overline{y} - \overline{x} b_1
+\end{equation}
+
+Wyliczamy $b_1$ korzystając ze wzory na średnią oraz wyliczonego wcześniej przez
+nas $b_0$
+\begin{equation}
+  \sum_{i=1}^{n} x_i y_i = (\overline{y} - \overline{x} b_1) \sum_{i=1}^{n} x_i + b_1 \sum_{i=1}^{n} x_i^2 \Rightarrow \sum_{i=1}^{n} x_i y_i = n\overline{x}\overline{y} - b_1 n \overline{x}^2 + b_1 \sum_{i=1}^{n} x_i^2
+\end{equation}
+
+Otrzymujemy więc:
+\begin{equation}
+b_0 = \overline{y} - \overline{x} b_1
+\end{equation}
+\begin{equation}
+  b_1 = \frac{\sum_{i=1}^{n} x_i y_i - n\overline{x}\overline{y}}{\sum_{i=1}^{n} x_i^2 - n \overline{x}^2}
+\end{equation}
+
+\pagebreak
+
+\subsection{Dowód 1}
+Rozwijamy lewą stronę:
+\begin{equation}
+  \sum_{i=1}^{n}(x_i^2 - 2x_i\overline{x} + \overline{x}^2) = \sum_{i=1}^{n} x_i^2 - 2\overline{x}\sum_{i=1}^{n} + n\overline{x}^2
+\end{equation}
+
+Ze wzoru na średnią:
+\begin{equation}
+  \sum_{i=1}^{n}x_i^2 - 2n\overline{x}^2 + n\overline{x}^2 = \sum_{i=1}^{n} x_i^2 - n\overline{x}^2
+  = \sum_{i=1}^{n} x_i^2 - \frac{1}{n} (\sum_{i=1}^{n} x_i)^2
+\end{equation}
+
+Co kończy dowód.
+
+\subsection{Dowód 2}
+
 \subsection{Wzór na współczynnik $b_1$}
 
 \end{document}
