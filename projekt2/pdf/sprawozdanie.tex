@@ -43,7 +43,7 @@
 
 \lstset{style=mystyle}
 
-\title{Projekt WdAD}
+\title{Projekt 2 WdAD}
 \author{Filip Cebula 151410}
 \date{\today}
 
@@ -53,284 +53,113 @@
 \pagebreak
 
 \section{Zadanie 1}
-\subsection{Podpunkt A}
-Zapisujemy dane do naszego zadania.
+\subsection{Model regresji}
+Tworzymy model regresji w R, używając polecenia \textbf{lm()} i sprawdzamy
+jego parametry korzystając z polecenia \textbf{summary}. Na potrzebę zadania
+analizie poddamy zestaw danych \textit{crabs} z biblioteki MASS, który
+zawiera informacje o rozmiarach badanych krabów.
 
 \begin{lstlisting}[language=R]
-earnings = c(45617,7166,18594,2236,1278,19828,4033,28151,2414,3800);
-earnings.sd = 15000;
+regression = lm(CW ~ CL, data = crabs);
+cat("\nRegression model width~length of crabs body\n");
+summary(regression);
+cat("\n");
+
+# OUTPUT:
+# Regression model width~length of crabs body
+# 
+# Call:
+# lm(formula = CW ~ CL, data = crabs)
+# 
+# Residuals:
+    # Min      1Q  Median      3Q     Max 
+# -1.7683 -0.6088  0.1075  0.5394  1.8092 
+# 
+# Coefficients:
+            # Estimate Std. Error t value Pr(>|t|)    
+# (Intercept) 1.089919   0.257490   4.233 3.53e-05 ***
+# CL          1.100266   0.007831 140.504  < 2e-16 ***
+# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+# 
+# Residual standard error: 0.7864 on 198 degrees of freedom
+# Multiple R-squared:  0.9901,	Adjusted R-squared:   0.99 
+# F-statistic: 1.974e+04 on 1 and 198 DF,  p-value: < 2.2e-16
 \end{lstlisting}
 
-Estymujemy średnią z próbki, oraz błąd standardowy (korzystając z danego odchylenia standardowego).
+
+\subsection{Wykresy}
+Generujemy wykresy do zadania, które pozwolą nam na lepszą analizę naszego
+modelu.
 
 \begin{lstlisting}[language=R]
-earnings.mean = mean(earnings);
-earnings.se = earnings.sd / sqrt(length(earnings));
+png(file = "plots/scatterplot.png", height=1000, width=1000, res=150);
+plot(x=crabs$CL, y=crabs$CW, xlab="Carapace length [mm]",
+  ylab="Carapace width [mm]", main="Crab's carapace size");
+abline(reg = regression, col = "red");
+dev.off();
 
-# Output
-# Earnings mean:  13311.7 
-# Earnings standard error:  4743.416 
-\end{lstlisting}
-
-Obliczamy przedziały ufności 90\%, przy założeniu rozkładu normalnego próbki.
-
-\begin{lstlisting}[language=R]
-earnings.interval1 = 0.1;
-earnings.ci1.margin = qnorm(p = (1 - earnings.interval1 / 2)) * earnings.se;
-earnings.ci1 = earnings.mean + c(-1,1) * earnings.ci1.margin;
-
-# Output
-# "Confidence interval for 0.9 assuming normal distribution:"
-# 5509.474 21113.926
-\end{lstlisting}
-
-Obliczamy przedziały ufności 95\%, przy założeniu rozkładu normalnego próbki.
-
-\begin{lstlisting}[language=R]
-earnings.interval2 = 0.05;
-earnings.ci2.margin = qnorm(p = (1 - earnings.interval2 / 2)) * earnings.se;
-earnings.ci2 = earnings.mean + c(-1,1) * earnings.ci2.margin;
-
-# Output
-# "Confidence interval for 0.95 assuming normal distribution:"
-# 4014.775 22608.625
-\end{lstlisting}
-
-\pagebreak
-
-\subsection{Podpunkt B}
-Odrzucamy dane nam wcześniej odchylenie standardowe i estymujemy nowe odchylenie standardowe,
-oraz błąd standardowy na podstawie danej próbki.
-
-\begin{lstlisting}[language=R]
-earnings.sd = sd(earnings);
-earnings.se = earnings.sd / sqrt(length(earnings));
-
-# Output
-# Earnings standard derivation:  14662.04 
-# Earnings standard error:  4636.545 
-\end{lstlisting}
-
-Używamy rozkładu t Studenta, żeby obliczyć przedziały ufności dla naszej próbki.
-
-Przedział ufności 90\%.
-
-\begin{lstlisting}[language=R]
-earnings.interval1 = 0.1;
-earnings.ci1.margin = qt(p = (1 - earnings.interval1 / 2),
-                         df = length(earnings) - 1) * earnings.se;
-earnings.ci1 = earnings.mean + c(-1,1) * earnings.ci1.margin;
-
-# Output
-# "Confidence interval for 0.9 assuming Student's t-distribution:"
-# 4812.39 21811.01
-\end{lstlisting}
-
-Przedział ufności 95\%.
-
-\begin{lstlisting}[language=R]
-earnings.interval2 = 0.05;
-earnings.ci2.margin = qt(p = (1 - earnings.interval2 / 2),
-                         df = length(earnings) - 1) * earnings.se;
-earnings.ci2 = earnings.mean + c(-1,1) * earnings.ci2.margin;
-
-# Output
-# "Confidence interval for 0.95 assuming Student's t-distribution:"
-# 2823.107 23800.293
+png(file = "plots/model_plots.png", height=1000, width=1000, res=150);
+par(mfrow = c(2,2));
+plot(regression);
+dev.off();
 \end{lstlisting}
 
 \pagebreak
 
-\subsection{Podpunkt C}
-Odrzucamy założenie o normalności rozkładu naszej próbki. Możemy użyć histogramu,
-oraz wykresu kwantyl-kwantyl, aby sprawdzić jak blisko rozkładu normalnego jest
-rozkład naszej próbki.
-
+\subsection{Scatterplot}
 \begin{figure}[h]
-\includegraphics[scale=0.5]{earnings_hist.png}
-\includegraphics[scale=0.5]{earnings_qq.png}
+\includegraphics[scale=0.5]{scatterplot.png}
 \centering
 \end{figure}
 
-Na podstawie powyższych wykresów, a szczególnie wykresu kwantyl-kwantyl, możemy zauważyć,
-że rozkład naszej próbki nie jest rozkładem normalnym. Wynika z tego, że obliczone przez
-nas powyżej przedziały ufności nie są dokładne. Aby otrzymać dokładniejsze wyniki, użyjemy
-metody bootstrap do obliczenia przedziałów ufności.
+\subsection{Wykresy diagnostyczne}
+\begin{figure}[h]
+\includegraphics[scale=0.5]{model_plots.png}
+\centering
+\end{figure}
 
 \pagebreak
 
-Tworzymy funkcje bootstrap i używamy jej na naszej próbce.
+\subsection{Wnioski}
+Patrząc na wartość R-squared możemy wywnioskować, że nasz model wyjaśnia
+99\% zmienności szerokości ciała kraba na podstawie jego długości. Sugeruje to,
+że długość ciała ma silny wpływ na jego szerokość.
 
-\begin{lstlisting}[language=R]
-my_bootstrap = function(data) {
-    n = length(data);
-    means = c();
+Widzimy że wszyskie residuals, mieszczą się w przedziale [-2;2], co oznacza,
+że wartości faktyczne są bardzo mało oddalone od wartości, które przewiduje nasz
+model.
 
-    for (i in 1:10000) {
-        rands = sample(1:n, n, replace = T);
-        xs = data[rands];
+Na podstawie wartości F-statistic i p-value, możemy odrzucić hipotezę zerową,
+że nie ma relacji pomiędzy szerokością a długością ciała kraba.
 
-        means = append(means, mean(xs));
-    }
+Patrząc na scatterplot widzimy, że wszystkie punkty są blisko czerwonej lini
+(lini przewidywanej przez nasz model) i nie ma wartości odstających, co sugeruje
+że model jest dobrze dopasowany.
 
-    return(means);
-}
+Z wykresu Residuals vs Fitted, możemy odczytać że liniowość jest zachowana
+(patrząc na czerwoną linię), nie ma dużych wartości odstających (wszystkie są
+w miarę zgrupowane), oraz że nasze wartości są homoskedastyczne (tzn. mają
+podobną wariancje). Wykres Scale-Location potwierdza homoskedastyczność, którą
+ustaliliśmy wcześniej.
 
-earnings.bootstrap = my_bootstrap(earnings);
-\end{lstlisting}
+Z wykresu kwantyl-kwantyl widzimy, że nasze wartości mają rozkład podobny do
+normalnego, co wskazuje, że założenie o normalności reszt jest spełnione i nasz
+model może być odpowiedni. Możemy jednak zwrócić uwagę na lekko długie ogony
+naszego rozkładu, ale ich odchylenie od lini prostej wykresu jest stosunkowo
+małe i występuje dla bardzo małej ilości wartości.
 
-Wyliczamy przedział ufności 90\%.
+Z wykresu Residuals vs Leverage widzimy, że rozpiętość wartości na wykresie
+jest stosunkowo równa i żadna wartość nie przekracza dystansu Cook'a, przez co
+możemy stwierdzić, że nasz model nie ma dużo wartości odstających.
 
-\begin{lstlisting}[language=R]
-quantile(earnings.bootstrap, probs = c(0.05, 0.95));
-
-# Output
-# "Confidence interval for 0.9:"
-#      5%      95% 
-# 6641.84 20903.85 
-\end{lstlisting}
-
-Wyliczamy przedział ufności 95\%.
-
-\begin{lstlisting}[language=R]
-quantile(earnings.bootstrap, probs = c(0.025, 0.975));
-
-# Output
-# "Confidence interval for 0.95:"
-#     2.5%     97.5% 
-# 5638.485 22847.100 
-\end{lstlisting}
+Na podstawie powyższych obserwacji możemy stwierdzić, że nasz model regresji
+liniowej jest dobrze dopasowany do danych.
 
 \pagebreak
 
 \section{Zadanie 2}
-W tym zadaniu do zbadania wybrałem zestawy danych: shrimp, Sitka89 i quine.
-
-Najpierw dodałem bibliotekę MASS, a następnie napisałem drugą metodę bootstrap,
-która ułatwi mi liczenie przedziałów ufności dla odchylenia standardowego i wariancji.
-
-\begin{lstlisting}[language=R]
-library(MASS);
-
-adv_bootstrap = function(data, f) {
-    n = length(data);
-    result = c();
-
-    for (i in 1:10000) {
-        rands = sample(1:n, n, replace = T);
-        xs = data[rands];
-
-        result = append(result, f(xs));
-    }
-
-    return(result);
-}
-\end{lstlisting}
-
-\pagebreak
-
-\subsection{Shrimp}
-Shrimp to zestaw danych, który opisuje ilość krewetek (procent całkowitej masy)
-w koktajlu krewetkowym.
-
-\begin{figure}[h]
-\includegraphics[scale=0.5]{shrimps_qq.png}
-\centering
-\end{figure}
-
-Na powyższym wykresie możemy zauważyć, że poza dwoma wartościami skrajnymi,
-rozkład naszych danych jest bardzo zbliżony do rozkładu normalnego, jednak
-o ciężkich ogonach (fat tails), co oznacza zbyt dużą kurtozę.
-
-Obliczmy zatem przedziały ufności 95\%, dla średniej, odchylenia standardowego i wariancji.
-
-\begin{lstlisting}[language=R]
-shrimps.bootstrap.mean = adv_bootstrap(shrimp, mean);
-shrimps.bootstrap.sd = adv_bootstrap(shrimp, sd);
-shrimps.bootstrap.var = adv_bootstrap(shrimp, var);
-
-# Output
-# "Confidence intervals for 0.95 for shrimps:"
-# "Mean:"
-#    2.5%    97.5% 
-# 30.92222 32.57222 
-# "Standard deviation:"
-#     2.5%     97.5% 
-# 0.8732765 2.5980592 
-# "Standard error:"
-#     2.5%     97.5% 
-# 0.7527917 6.7226168 
-\end{lstlisting}
-
-\pagebreak
-
-\subsection{Npk}
-Npk to zestaw danych z eksperymentu, który testował wpływ azotu, fosforu i potasu
-na wzrost groszku. Ja skupiłem się na statystyce yield, która zawiera infromacje
-o tym, ile grochu zebrano na jednej działce.
-
-\begin{figure}[h]
-\includegraphics[scale=0.5]{npkyield_qq.png}
-\centering
-\end{figure}
-
-Na powyższym wykresie widzimy, że rozkład naszych danych, jest bardzo podobny do
-rozkładu normalnego. Jednak nasz rozkład ba bardzo lekkie ogony, co oznacza ujemną
-kurtozę.
-
-Obliczmy zatem przedziały ufności 95\%, dla średniej, odchylenia standardowego i wariancji.
-
-\begin{lstlisting}[language=R]
-npkyield.bootstrap.mean = adv_bootstrap(npk$yield, mean);
-npkyield.bootstrap.sd = adv_bootstrap(npk$yield, sd);
-npkyield.bootstrap.var = adv_bootstrap(npk$yield, var);
-
-# Output
-# "Confidence intervals for 0.95 for npk yield:"
-# "Mean:"
-#   2.5%   97.5% 
-# 52.4625 57.3500 
-# "Standard deviation:"
-#    2.5%    97.5% 
-# 4.422683 7.627811 
-# "Standard error:"
-#    2.5%    97.5% 
-# 19.73285 57.91169 
-\end{lstlisting}
-
-\pagebreak
-
-\subsection{Quine}
-Quine to zestaw danych, który zawiera informacje o uczniach z Austalii. Ja skupiłem
-się na statystyce, która przedstawi ile dni dane dziecko opuściło w trakcie roku szkolnego.
-
-\begin{figure}[h]
-\includegraphics[scale=0.5]{quineabsent_qq.png}
-\centering
-\end{figure}
-
-Na powyższym wykresie możemy zauważyć, że nasz rozkład znacząco odbiega od
-rozkładu normalnego, ponieważ nasz rozkład jest zbyt pozytywnie skośny (tj. 
-pochyla się na lewą stonę).
-
-Obliczmy zatem przedziały ufności 95\%, dla średniej, odchylenia standardowego i wariancji.
-
-\begin{lstlisting}[language=R]
-quineabsent.bootstrap.mean = adv_bootstrap(quine$Days, mean);
-quineabsent.bootstrap.sd = adv_bootstrap(quine$Days, sd);
-quineabsent.bootstrap.var = adv_bootstrap(quine$Days, var);
-
-# Output
-# "Confidence intervals for 0.95 for absent days:"
-# "Mean:"
-#    2.5%    97.5% 
-# 13.96575 19.13031 
-# "Standard deviation:"
-#    2.5%    97.5% 
-# 13.43493 18.74195 
-# "Standard error:"
-#    2.5%    97.5% 
-# 181.1858 353.6281 
-\end{lstlisting}
+\subsection{Współczynniki regresji}
+\subsection{Dowód}
+\subsection{Wzór na współczynnik $b_1$}
 
 \end{document}
